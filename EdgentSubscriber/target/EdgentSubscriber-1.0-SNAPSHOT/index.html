@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 
+         Project 3 solution(Part 4) for subscribing temperature information from the edge device.
+         @author Poojith Jain(poojithj) 
+         Date : March 5, 2017        
+        -->
+        
+        <!-- Link the Google Charts library into the JavaScript code -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            // Initialize Google charts with the gauge package.
+            google.charts.load('current', {'packages': ['gauge']});
+            // Call displayTemperature after loading the Google Charts API.
+            google.charts.setOnLoadCallback(displayTemperature); 
+            // Customize the chart by setting options.
+            var gaugeOptions = {min: 30, max: 200, yellowFrom: 120, yellowTo: 170,
+            redFrom: 170, redTo: 200, minorTicks:5, width: 1100,
+                height: 150};
+            // Declare variable to draw the gauge.
+            var gauge; 
+
+            // A function to which data is populated in order to draw the gauge chart.
+            function displayTemperature() {
+                // Initialize the data table for the chart.
+                gaugeData = new google.visualization.DataTable(); 
+                // Add column to the chart.
+                gaugeData.addColumn('number', 'Temperature'); 
+                // Add rows to the chart.
+                gaugeData.addRows(1); 
+                // Populate the temperature value retrieved from the broker.
+                gaugeData.setCell(0, 0, temperature); 
+                // Get the HTML5 element by ID, 'chart', in order to draw the gauge chart.
+                gauge = new google.visualization.Gauge(document.getElementById('chart'));
+                // Draw the gauge chart with populated data while applying the previously set options.
+                gauge.draw(gaugeData, gaugeOptions); 
+            }
+         </script>
+    </head>
+    <body>
+    
+        <p> Real-time temperature information from the edge device: </p>
+        
+        <!-- Element used to display the parsed JSON-LD information that is sent by the publisher. -->
+        <div id="jsonContent" style= "background-color: lightblue; text-align: center; height: 200px; width: 400px; border: 1px solid black;"> </div>
+              
+        <!-- Element used to display the gauge chart for the temperature levels. 
+        This element is referenced by its unique ID in Google charts. -->       
+        <div id="chart" style="text-align: center;"></div>
+        
+         
+        <!--Consume the minified version of the Paho JavaScript Client -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+        <!--Consume the minified version of the jQuery library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!--Link the JavaScript code to connect to the HiveMQ broker and to subscribe messages -->
+        <script src="subscriber.js"></script>
+    </body>
+</html>
